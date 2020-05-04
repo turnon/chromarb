@@ -1,4 +1,6 @@
 require "chromark/version"
+require "erb"
+require "json"
 
 class Chromark
 
@@ -35,7 +37,7 @@ class Chromark
     end
 
     def host
-      @host ||= URI.parse(href).host rescue nil
+      @host ||= URI.parse(href).host rescue "nil"
     end
   end
 
@@ -67,8 +69,9 @@ class Chromark
   end
 
   def parse
-    pp dup_names
-    pp favorite_hosts
+    template = File.read File.expand_path("../chromark/chart.erb", __FILE__)
+    res = ERB.new(template).result(binding)
+    File.open(File.join(Dir.pwd, "bookmark_stat.html"), "w"){ |f| f.puts res }
   end
 
   private

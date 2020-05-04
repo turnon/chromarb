@@ -7,4 +7,5 @@
 /spec/reports/
 /tmp/
 *.gem
+*.html
 Gemfile.lock
