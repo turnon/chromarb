@@ -2,8 +2,4 @@
 
 require "chromark"
 
-bm = Chromark.new(ARGF)
-
-pp bm.dup_names
-
-pp bm.favorite_hosts
+Chromark.parse

@@ -39,12 +39,19 @@ class Chromark
     end
   end
 
-  def initialize(argf)
+  class << self
+    def parse
+      raise "bookmark file not given" if ARGV.size == 0
+      new.parse
+    end
+  end
+
+  def initialize
     @entries = []
     @cates = []
     @root = nil
 
-    argf.each do |line|
+    ARGF.each do |line|
       case line
       when /\s*<DT><A/
         e = Entry.new(line, @cates)
@@ -58,6 +65,13 @@ class Chromark
       end
     end
   end
+
+  def parse
+    pp dup_names
+    pp favorite_hosts
+  end
+
+  private
 
   def dup_names
     return @dup_names if @dup_names

@@ -1,7 +1,7 @@
-require "test_helper"
+#!/usr/bin/env ruby
 
-class ChromarkTest < Minitest::Test
-  def test_that_it_has_a_version_number
-    refute_nil ::Chromark::VERSION
-  end
-end
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require "chromark"
+
+Chromark.parse
