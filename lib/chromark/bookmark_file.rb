@@ -19,6 +19,10 @@ class Chromark
       def path_str
         @path_str ||= parent ? File.join(parent.path_str, name) : "/"
       end
+
+      def deep
+        @deep ||= parent ? parent.deep + 1 : 0
+      end
     end
 
     class Entry
@@ -34,6 +38,10 @@ class Chromark
 
       def path_str
         parent ? parent.path_str : "/"
+      end
+
+      def deep
+        parent ? parent.deep : 0
       end
 
       def host
@@ -65,11 +73,17 @@ class Chromark
         @data = analyze
       end
 
-      def group_by(elements, attr)
-        elements.group_by(&attr).
-          select{ |name, entries| entries.size > 1 }.
-          sort{ |e1, e2| e2[1].size <=> e1[1].size }.
-          to_h
+      def group_by(
+        elements,
+        attribute,
+        filter: ->(name, entries){ entries.size > 1 },
+        sortor: ->(e1, e2){ e2[1].size <=> e1[1].size }
+      )
+
+        hash = elements.group_by(&attribute)
+        hash = hash.select(&filter) if filter
+        hash = hash.sort(&sortor) if sortor
+        hash.to_h
       end
     end
 
@@ -88,6 +102,12 @@ class Chromark
     class Categories < Stat
       def analyze
         group_by(file.entries, :path_str)
+      end
+    end
+
+    class Deep < Stat
+      def analyze
+        group_by(file.entries, :deep, filter: nil, sortor: nil)
       end
     end
 
