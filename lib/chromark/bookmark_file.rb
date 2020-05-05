@@ -107,7 +107,7 @@ class Chromark
 
     class Deep < Stat
       def analyze
-        group_by(file.entries, :deep, filter: nil, sortor: nil)
+        group_by(file.entries, :deep, filter: nil, sortor: ->(e1, e2){ e1[0] <=> e2[0] })
       end
     end
 
