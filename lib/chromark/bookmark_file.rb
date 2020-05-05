@@ -1,6 +1,46 @@
 class Chromark
   module BookmarkFile
 
+    class Category
+      attr_reader :added, :moded, :name, :parent
+
+      def initialize(added, moded, name, parent)
+        @added = added
+        @moded = moded
+        @name = name
+        @parent = parent
+        @entries = []
+      end
+
+      def <<(entry)
+        @entries << entry
+      end
+
+      def path_str
+        @path_str ||= parent ? parent.path_str  + "/" + name : "/"
+      end
+    end
+
+    class Entry
+      attr_reader :href, :added, :name, :parent
+
+      def initialize(href, added, name, parent)
+        @href = href
+        @added = added
+        @name = name
+        @parent = parent
+        parent << self
+      end
+
+      def path_str
+        parent.path_str
+      end
+
+      def host
+        @host ||= URI.parse(href).host rescue "nil"
+      end
+    end
+
     def entries
       @entries ||= []
     end
