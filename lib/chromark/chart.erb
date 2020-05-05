@@ -7,37 +7,53 @@
 </head>
 
 <body>
-  <div id="hosts" style="height: 400px;"></div>
 
-  <script type="text/javascript">
-    let hosts = echarts.init(document.getElementById('hosts'), 'light')
-    hosts.setOption({
-      grid: {
-        left: "10%",
-        bottom: "35%"
-      },
-      dataZoom: [
-        {type: "slider"}
-      ],
-      tooltip: {},
-      xAxis: {
-        axisLabel: {
-          interval: 0,
-          rotate: 45
+  <script>
+    let graphs = [], g = null
+  </script>
+
+  <% stats.each do |st| %>
+    <div id="<%= st.class.to_s %>" style="height: 400px;"></div>
+    <script type="text/javascript">
+      g = echarts.init(document.getElementById('<%= st.class.to_s %>'), 'light')
+      graphs.push(g)
+      g.setOption({
+        grid: {
+          left: "10%",
+          bottom: "35%"
         },
-        data: <%= favorite_hosts.keys %>
-      },
-      yAxis: {},
-      series: [{
-        type: 'bar',
-        data: <%= favorite_hosts.values %>
-      }]
-    });
+        dataZoom: [
+          {type: "slider"}
+        ],
+        tooltip: {},
+        xAxis: {
+          axisLabel: {
+            interval: 0,
+            rotate: 45
+          },
+          data: <%= st.data.keys %>
+        },
+        yAxis: {},
+        series: [{
+          type: 'bar',
+          data: <%= st.data.values.map(&:size) %>
+        }]
+      });
 
+      window.addEventListener("resize", () => {
+        hosts.resize();
+      });
+    </script>
+  <% end %>
+
+  <script>
     window.addEventListener("resize", () => {
-      hosts.resize();
+      graphs.forEach(element => {
+        element.resize()
+      });
     });
   </script>
+
 </body>
 
 </html>
