@@ -10,8 +10,8 @@ class Chromark
 
   class << self
     def parse
-      raise "bookmark file not given" if ARGV.size == 0
-      new(JsonFormat.new).parse
+      klass = ARGV.size == 0 ? JsonFormat : Html
+      new(klass.new).parse
     end
   end
 
