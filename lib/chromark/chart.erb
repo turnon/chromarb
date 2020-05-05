@@ -44,14 +44,9 @@
   <div class="graph">
     <script>
       let graphs = [], g = null
-    </script>
 
-    <% stats.each do |st| %>
-      <div id="<%= st.class.to_s %>" style="height: 400px;"></div>
-      <script type="text/javascript">
-        g = echarts.init(document.getElementById('<%= st.class.to_s %>'), 'light')
-        graphs.push(g)
-        g.setOption({
+      function option(x, y) {
+        return {
           grid: {
             left: "10%",
             bottom: "35%"
@@ -65,15 +60,27 @@
               interval: 0,
               rotate: -45
             },
-            data: <%= st.data.keys %>
+            data: x
           },
           yAxis: {},
           series: [{
             type: 'bar',
             color: 'pink',
-            data: <%= st.data.values.map(&:size) %>
+            data: y
           }]
-        });
+        }
+      }
+    </script>
+
+    <% stats.each do |st| %>
+      <div id="<%= st.class.to_s %>" style="height: 400px;"></div>
+      <script type="text/javascript">
+        g = echarts.init(document.getElementById('<%= st.class.to_s %>'), 'light')
+        graphs.push(g)
+        g.setOption(option(
+          <%= st.data.keys %>,
+          <%= st.data.values.map(&:size) %>
+        ))
       </script>
     <% end %>
 
