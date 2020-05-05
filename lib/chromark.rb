@@ -27,10 +27,8 @@ class Chromark
     File.open(File.join(Dir.pwd, "bookmark_stat.html"), "w"){ |f| f.puts res }
   end
 
-  BookmarkFile.instance_methods.each do |m|
-    define_method(m) do
-      file.send(m)
-    end
+  def stats
+    file.stats
   end
 
 end
