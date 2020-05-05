@@ -29,7 +29,7 @@ class Chromark
         @added = added
         @name = name
         @parent = parent
-        parent << self
+        parent << self if parent
       end
 
       def path_str

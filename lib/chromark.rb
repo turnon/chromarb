@@ -4,13 +4,14 @@ require "json"
 
 require "chromark/bookmark_file"
 require "chromark/html"
+require "chromark/json_format"
 
 class Chromark
 
   class << self
     def parse
       raise "bookmark file not given" if ARGV.size == 0
-      new(Html.new).parse
+      new(JsonFormat.new).parse
     end
   end
 
