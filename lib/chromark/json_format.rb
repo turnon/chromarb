@@ -4,7 +4,7 @@ class Chromark
 
     class Node
       def initialize(json, file, parent)
-        if json["type"] = "url"
+        if json["type"] == "url"
           e = BookmarkFile::Entry.new(json["url"], json["date_added"], json["name"], parent)
           file.entries << e
         end
