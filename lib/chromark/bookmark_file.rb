@@ -17,7 +17,7 @@ class Chromark
       end
 
       def path_str
-        @path_str ||= parent ? parent.path_str  + "/" + name : "/"
+        @path_str ||= parent ? File.join(parent.path_str, name) : "/"
       end
     end
 
@@ -33,7 +33,7 @@ class Chromark
       end
 
       def path_str
-        parent.path_str
+        parent ? parent.path_str : "/"
       end
 
       def host
@@ -80,8 +80,14 @@ class Chromark
     end
 
     class FavoriteHosts < Stat
-      def  analyze
+      def analyze
         group_by(file.entries, :host)
+      end
+    end
+
+    class Categories < Stat
+      def analyze
+        group_by(file.entries, :path_str)
       end
     end
 
