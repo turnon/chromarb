@@ -3,56 +3,87 @@
 
 <head>
   <meta charset="utf-8">
+  <style>
+    .nav {
+      position: fixed;
+      left: 2%;
+      top: 55px;
+    }
+
+    .nav a {
+      display: block;
+      margin: 0 0 10px;
+      color: black;
+    }
+
+    .nav a:visited {
+      color: black;
+    }
+
+    .nav a:hover {
+      color: pink;
+    }
+
+    .graph {
+      padding: 0 0 0 8%;
+      width: 85%;
+    }
+  </style>
   <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.7.0/echarts.min.js"></script>
 </head>
 
 <body>
 
-  <script>
-    let graphs = [], g = null
-  </script>
+  <div class="nav">
+    <% stats.each do |st| %>
+      <a href="#<%= st.class.to_s %>" ><%= st.class.to_s.sub(/.*::/, '') %></a>
+    <% end %>
+  </div>
 
-  <% stats.each do |st| %>
-    <div id="<%= st.class.to_s %>" style="width: 90%; height: 400px;"></div>
-    <script type="text/javascript">
-      g = echarts.init(document.getElementById('<%= st.class.to_s %>'), 'light')
-      graphs.push(g)
-      g.setOption({
-        grid: {
-          left: "10%",
-          bottom: "35%"
-        },
-        dataZoom: [
-          {type: "slider"}
-        ],
-        tooltip: {},
-        xAxis: {
-          axisLabel: {
-            interval: 0,
-            rotate: 45
+  <div class="graph">
+    <script>
+      let graphs = [], g = null
+    </script>
+
+    <% stats.each do |st| %>
+      <div id="<%= st.class.to_s %>" style="height: 400px;"></div>
+      <script type="text/javascript">
+        g = echarts.init(document.getElementById('<%= st.class.to_s %>'), 'light')
+        graphs.push(g)
+        g.setOption({
+          grid: {
+            left: "10%",
+            bottom: "35%"
           },
-          data: <%= st.data.keys %>
-        },
-        yAxis: {},
-        series: [{
-          type: 'bar',
-          data: <%= st.data.values.map(&:size) %>
-        }]
-      });
+          dataZoom: [
+            {type: "slider"}
+          ],
+          tooltip: {},
+          xAxis: {
+            axisLabel: {
+              interval: 0,
+              rotate: -45
+            },
+            data: <%= st.data.keys %>
+          },
+          yAxis: {},
+          series: [{
+            type: 'bar',
+            color: 'pink',
+            data: <%= st.data.values.map(&:size) %>
+          }]
+        });
+      </script>
+    <% end %>
 
+    <script>
       window.addEventListener("resize", () => {
-        hosts.resize();
+        graphs.forEach(element => {
+          element.resize()
+        });
       });
     </script>
-  <% end %>
-
-  <script>
-    window.addEventListener("resize", () => {
-      graphs.forEach(element => {
-        element.resize()
-      });
-    });
-  </script>
+  </div>
 
 </body>
 
