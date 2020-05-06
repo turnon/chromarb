@@ -10,7 +10,7 @@ class Chromark
 
   class << self
     def parse
-      klass = ARGV.size == 0 ? JsonFormat : Html
+      klass = ARGV[0].to_s =~ /html$/ ? Html : JsonFormat
       new(klass.new).parse
     end
   end

@@ -19,8 +19,13 @@ class Chromark
     end
 
     def initialize
-      file = File.join('C:', 'Users', ENV['USERNAME'], 'AppData',
-        'Local', 'Google', 'Chrome', 'User Data', 'Default', 'Bookmarks')
+      file =
+        if Gem.win_platform?
+          File.join('C:', 'Users', ENV['USERNAME'], 'AppData',
+                    'Local', 'Google', 'Chrome', 'User Data', 'Default', 'Bookmarks')
+        else
+          File.join(ENV['HOME'], '.config/chromium/Default/Bookmarks')
+        end
 
       json = JSON.parse File.read file
 

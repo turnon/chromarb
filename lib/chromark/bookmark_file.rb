@@ -54,7 +54,7 @@ class Chromark
     end
 
     def stats
-      Stat.sub_stats.map{ |sub| sub.new(self) }
+      @stats ||= Stat.sub_stats.map{ |sub| sub.new(self) }
     end
 
     class Stat
